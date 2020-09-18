@@ -16,6 +16,7 @@
 
 package com.dimowner.audiorecorder.audio.recorder;
 
+import android.content.Context;
 import android.media.MediaRecorder;
 import android.os.Build;
 
@@ -64,7 +65,7 @@ public class ThreeGpRecorder implements RecorderContract.Recorder {
 	}
 
 	@Override
-	public void prepare(String outputFile, int channelCount, int sampleRate, int bitrate) {
+	public void prepare(String outputFile, int channelCount, int sampleRate, int bitrate, Context context) {
 		recordFile = new File(outputFile);
 		if (recordFile.exists() && recordFile.isFile()) {
 			recorder = new MediaRecorder();
@@ -97,7 +98,7 @@ public class ThreeGpRecorder implements RecorderContract.Recorder {
 	}
 
 	@Override
-	public void startRecording() {
+	public void startRecording(Context context) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isPaused) {
 			try {
 				recorder.resume();

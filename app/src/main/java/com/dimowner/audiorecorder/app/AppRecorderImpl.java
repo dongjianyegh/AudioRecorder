@@ -16,6 +16,8 @@
 
 package com.dimowner.audiorecorder.app;
 
+import android.content.Context;
+
 import com.dimowner.audiorecorder.ARApplication;
 import com.dimowner.audiorecorder.AppConstants;
 import com.dimowner.audiorecorder.BackgroundQueue;
@@ -50,6 +52,7 @@ public class AppRecorderImpl implements AppRecorder {
 	private boolean isProcessing = false;
 
 	private volatile static AppRecorderImpl instance;
+	private Context mContext;
 
 	public static AppRecorderImpl getInstance(RecorderContract.Recorder recorder,
 															LocalRepository localRep, BackgroundQueue tasks,
@@ -78,7 +81,7 @@ public class AppRecorderImpl implements AppRecorder {
 		recorderCallback = new RecorderContract.RecorderCallback() {
 			@Override
 			public void onPrepareRecord() {
-				audioRecorder.startRecording();
+				audioRecorder.startRecording(mContext);
 			}
 
 			@Override
@@ -288,9 +291,10 @@ public class AppRecorderImpl implements AppRecorder {
 	}
 
 	@Override
-	public void startRecording(String filePath, int channelCount, int sampleRate, int bitrate) {
+	public void startRecording(String filePath, int channelCount, int sampleRate, int bitrate, Context context) {
+		mContext = context;
 		if (!audioRecorder.isRecording()) {
-			audioRecorder.prepare(filePath, channelCount, sampleRate, bitrate);
+			audioRecorder.prepare(filePath, channelCount, sampleRate, bitrate, context);
 		}
 	}
 
@@ -304,7 +308,7 @@ public class AppRecorderImpl implements AppRecorder {
 	@Override
 	public void resumeRecording() {
 		if (audioRecorder.isPaused()) {
-			audioRecorder.startRecording();
+			audioRecorder.startRecording(mContext);
 		}
 	}
 

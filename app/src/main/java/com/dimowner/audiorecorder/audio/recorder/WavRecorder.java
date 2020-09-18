@@ -16,9 +16,11 @@
 
 package com.dimowner.audiorecorder.audio.recorder;
 
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.os.Vibrator;
 
 import com.dimowner.audiorecorder.AppConstants;
 import com.dimowner.audiorecorder.exception.InvalidOutputFile;
@@ -86,7 +88,7 @@ public class WavRecorder implements RecorderContract.Recorder {
 	}
 
 	@Override
-	public void prepare(String outputFile, int channelCount, int sampleRate, int bitrate) {
+	public void prepare(String outputFile, int channelCount, int sampleRate, int bitrate, Context context) {
 		this.sampleRate = sampleRate;
 //		this.framesPerVisInterval = (int)((VISUALIZATION_INTERVAL/1000f)/(1f/sampleRate));
 		this.channelCount = channelCount;
@@ -133,7 +135,7 @@ public class WavRecorder implements RecorderContract.Recorder {
 	}
 
 	@Override
-	public void startRecording() {
+	public void startRecording(final Context context) {
 		if (recorder != null && recorder.getState() == AudioRecord.STATE_INITIALIZED) {
 			if (isPaused) {
 				startRecordingTimer();
@@ -149,6 +151,17 @@ public class WavRecorder implements RecorderContract.Recorder {
 					recordingThread = new Thread(new Runnable() {
 						@Override
 						public void run() {
+
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException ignored) {
+
+							}
+
+							Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+							long [] pattern = {100,400,100,400};   // 停止 开启 停止 开启
+							vibrator.vibrate(pattern,-1);           //重复两次上面的pattern 如果只想震动一次，index设为-1
+
 							writeAudioDataToFile();
 						}
 					}, "AudioRecorder Thread");

@@ -378,7 +378,7 @@ public class MainPresenter implements MainContract.UserActionsListener {
 	}
 
 	@Override
-	public void startRecording(Context context) {
+	public void startRecording(final Context context) {
 		try {
 			if (fileRepository.hasAvailableSpace(context)) {
 				if (audioPlayer.isPlaying()) {
@@ -402,7 +402,8 @@ public class MainPresenter implements MainContract.UserActionsListener {
 													path,
 													prefs.getSettingChannelCount(),
 													prefs.getSettingSampleRate(),
-													prefs.getSettingBitrate()
+													prefs.getSettingBitrate(),
+													context
 											);
 										}
 									});
