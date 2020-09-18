@@ -139,7 +139,7 @@ public class WavRecorder implements RecorderContract.Recorder {
 		if (recorder != null && recorder.getState() == AudioRecord.STATE_INITIALIZED) {
 			if (isPaused) {
 				startRecordingTimer();
-				recorder.startRecording();
+//				recorder.startRecording();
 				if (recorderCallback != null) {
 					recorderCallback.onStartRecord(recordFile);
 				}
@@ -184,7 +184,7 @@ public class WavRecorder implements RecorderContract.Recorder {
 	@Override
 	public void pauseRecording() {
 		if (isRecording) {
-			recorder.stop();
+//			recorder.stop();
 			pauseRecordingTimer();
 
 			isPaused = true;
